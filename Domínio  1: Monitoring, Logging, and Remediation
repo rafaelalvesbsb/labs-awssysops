@@ -1,0 +1,94 @@
+**Exercício de Laboratório 1: Configuração de Monitoramento com CloudWatch**
+
+Explicação: Neste laboratório, vamos configurar o monitoramento básico de uma instância EC2 usando o Amazon CloudWatch. O monitoramento é fundamental para garantir que nossas instâncias estejam saudáveis e funcionando corretamente.
+
+Passo a passo - Painel da AWS:
+1. Acesse o console da AWS e navegue até o serviço "EC2".
+2. Crie uma nova instância EC2 ou selecione uma existente.
+3. Na página de detalhes da instância, clique na aba "Monitoring" e ative o monitoramento detalhado.
+4. Aguarde alguns minutos para que os dados sejam coletados.
+5. Agora, vá para o serviço "CloudWatch" no console da AWS.
+6. No painel esquerdo, selecione "Metrics" e escolha "EC2" na lista de namespaces.
+7. Selecione a instância que você configurou o monitoramento detalhado e escolha as métricas que deseja monitorar (por exemplo, CPU, Memória, Disco).
+
+Passo a passo - AWS CLI:
+1. Use o comando `aws ec2 monitor-instances --instance-ids INSTANCE_ID` para ativar o monitoramento detalhado para a instância desejada.
+2. Aguarde alguns minutos para que os dados sejam coletados.
+3. Use o comando `aws cloudwatch list-metrics --namespace "AWS/EC2"` para listar as métricas disponíveis para o serviço EC2.
+4. Use o comando `aws cloudwatch get-metric-data --metric-data-queries MetricName=METRIC_NAME,Dimensions=[{Name=InstanceId,Value=INSTANCE_ID}] --start-time 2023-08-02T00:00:00Z --end-time 2023-08-02T23:59:59Z` para visualizar os dados das métricas específicas da instância.
+
+Resumo: O laboratório demonstrou como configurar o monitoramento básico de uma instância EC2 usando o Amazon CloudWatch. O monitoramento detalhado permitirá acompanhar o desempenho e a saúde da instância ao longo do tempo.
+
+**Exercício de Laboratório 2: Configuração de Logs com CloudWatch Logs**
+
+Explicação: Neste laboratório, aprenderemos a configurar o envio de logs de uma instância EC2 para o Amazon CloudWatch Logs. Isso nos permitirá visualizar e analisar os registros em um único local centralizado.
+
+Passo a passo - Painel da AWS:
+1. No console da AWS, vá para o serviço "CloudWatch".
+2. No painel esquerdo, clique em "Logs" e, em seguida, em "Actions".
+3. Escolha "Create log group" e atribua um nome ao grupo de logs.
+4. Acesse o serviço "EC2" e selecione a instância desejada.
+5. Clique com o botão direito na instância e selecione "Instance Settings" > "Configure Logs".
+6. Selecione a opção "CloudWatch Logs" e escolha o grupo de logs criado anteriormente.
+7. Salve as alterações.
+
+Passo a passo - AWS CLI:
+1. Use o comando `aws logs create-log-group --log-group-name LOG_GROUP_NAME` para criar um grupo de logs no CloudWatch Logs.
+2. Use o comando `aws ec2 associate-iam-instance-profile --instance-id INSTANCE_ID --iam-instance-profile Name=CloudWatchLogs-Instance-Profile` para associar uma instância EC2 a um perfil IAM que tenha permissões para enviar logs para o CloudWatch Logs.
+
+Resumo: O laboratório mostrou como configurar o envio de logs de uma instância EC2 para o Amazon CloudWatch Logs. Isso permitirá a centralização dos registros, facilitando a análise e solução de problemas.
+
+**Exercício de Laboratório 3: Configuração de Alarme de Monitoramento**
+
+Explicação: Neste laboratório, vamos criar um alarme no Amazon CloudWatch para monitorar a utilização da CPU de uma instância EC2. O alarme enviará notificações caso a utilização da CPU atinja um limite pré-estabelecido.
+
+Passo a passo - Painel da AWS:
+1. No console da AWS, vá para o serviço "CloudWatch".
+2. No painel esquerdo, clique em "Alarms" e escolha "Create alarm".
+3. Escolha a métrica "EC2" e selecione a instância e a métrica de CPU.
+4. Defina as condições do alarme, como porcentagem de utilização e período de avaliação.
+5. Configure uma ação de notificação, como o envio de um e-mail ou a execução de um script.
+
+Passo a passo - AWS CLI:
+1. Use o comando `aws cloudwatch put-metric-alarm --alarm-name CPU-Utilization-Alarm --comparison-operator GreaterThanOrEqualToThreshold --evaluation-periods 3 --metric-name CPUUtilization --namespace AWS/EC2 --period 300 --statistic Average --threshold 70 --alarm-actions ARN_OF_SNS_TOPIC` para criar o alarme.
+2. Use o comando `aws sns subscribe --topic-arn ARN_OF_SNS_TOPIC --protocol email --notification-endpoint YOUR_EMAIL_ADDRESS` para se inscrever no tópico SNS e receber notificações por e-mail.
+
+Resumo: O laboratório demonstrou como criar um alarme no Amazon CloudWatch para monitorar a utilização da CPU de uma instância EC2. Isso permitirá a detecção proativa de problemas de desempenho e ações corretivas rápidas.
+
+**Exercício de Laboratório 4: Análise de Logs com CloudWatch Insights**
+
+Explicação: Neste laboratório, aprenderemos a usar o CloudWatch Logs Insights para realizar consultas e análises avançadas nos logs coletados pelo Amazon CloudWatch Logs.
+
+Passo a passo - Painel da AWS:
+1. Acesse o serviço "CloudWatch" no console da AWS e clique em "Logs".
+2. Selecione o grupo de logs que contém os registros que você deseja analisar.
+3. Clique no botão "Search log group" para acessar o CloudWatch Logs Insights.
+4. Use a barra de consulta para executar consultas nos registros, como filtros e agregações.
+5. Analise os resultados e identifique padrões ou problemas nos registros
+
+.
+
+Passo a passo - AWS CLI:
+1. Use o comando `aws logs start-query --log-group-name LOG_GROUP_NAME --start-time 2023-08-02T00:00:00Z --end-time 2023-08-02T23:59:59Z --query-string "FILTER_LOGS_BY_FIELD | SORT_LOGS | LIMIT_RESULTS"` para iniciar uma consulta no CloudWatch Logs Insights.
+2. Use o comando `aws logs get-query-results --query-id QUERY_ID` para recuperar os resultados da consulta.
+
+Resumo: O laboratório demonstrou como utilizar o CloudWatch Logs Insights para analisar registros de maneira avançada. Essa funcionalidade é valiosa para depurar problemas complexos e identificar tendências nos logs.
+
+**Exercício de Laboratório 5: Automação de Resposta a Eventos com CloudWatch Events e Lambda**
+
+Explicação: Neste laboratório, vamos criar uma regra no Amazon CloudWatch Events para detectar um evento específico (por exemplo, uma instância EC2 sendo desligada) e acionar uma função AWS Lambda para executar uma ação automatizada em resposta ao evento.
+
+Passo a passo - Painel da AWS:
+1. No console da AWS, vá para o serviço "CloudWatch".
+2. No painel esquerdo, clique em "Events" e, em seguida, em "Rules".
+3. Clique em "Create rule".
+4. Defina a origem do evento, como um evento do serviço "EC2".
+5. Configure a condição da regra para corresponder ao evento desejado (por exemplo, "Event Type" é igual a "Instance State Change" e "State" é igual a "stopping").
+6. Escolha uma ação de destino, como "Lambda function", e selecione a função AWS Lambda que será acionada.
+
+Passo a passo - AWS CLI:
+1. Use o comando `aws events put-rule --name "EC2-Instance-Stopping-Rule" --event-pattern '{"source": ["aws.ec2"], "detail-type": ["EC2 Instance State-change Notification"], "detail": {"state": ["stopping"]}}'` para criar uma regra no CloudWatch Events.
+2. Use o comando `aws lambda create-function --function-name "EC2-Instance-Stopping-Function" --runtime python3.8 --role "ARN_OF_EXECUTION_ROLE" --handler "lambda_function.lambda_handler" --zip-file "fileb://lambda_function.zip"` para criar a função AWS Lambda que será acionada pela regra.
+3. Use o comando `aws events put-targets --rule "EC2-Instance-Stopping-Rule" --targets "Id"="1", "Arn"="ARN_OF_LAMBDA_FUNCTION"` para vincular a regra à função Lambda criada.
+
+Resumo: O laboratório demonstrou como criar uma regra no Amazon CloudWatch Events para detectar eventos específicos e acionar automaticamente uma função AWS Lambda. Isso permitirá automatizar ações em resposta a eventos, o que pode ser útil para realizar tarefas de remediação.
